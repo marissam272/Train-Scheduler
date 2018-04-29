@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+
+   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+
+
+   <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+
+
+ <title>Train Scheduler</title>
+</head>
+
+<body>
+
+       <div class="jumbotron">
+               <div class="container">
+                 <h1>Train Time!t</h1>
+                   <h2>Route and Schedule Directory</h2>
+               </div>
+             </div>
+
+   <div class="container">
+       <div class="row">
+           <div class="col-sm-12">
+               <p>Current Train Schedule</p>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Train Name</th>
+                        <th>Destination</th>
+                        <th>Frequency (min)</th>
+                        <th>Next Arrival</th>
+                        <th>Minutes Away</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr></tr>
+                        <tr></tr>
+                        <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+   <div class="container1">
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6 form-border">
+        <div class="row form-border">
+            <div class="col-sm-12">
+                <h2>Add Train</h2>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            <form action="/action_page.php">
+                 <div class="form-group">
+                    <label for="train-name">Train Name</label>
+                    <input type="train" class="form-control" id="trainName-input" name="train">
+                </div>
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <input type="destination" class="form-control" id="destination-input" name="destination">
+                  </div>
+                <div class="form-group">
+                    <label for="first">First Train Time (HH:mm - military time)</label>
+                    <input type="first" class="form-control" id="first-input" name="first">
+                </div>
+                <div class="form-group">
+                    <label for="frequency">Frequency (min)</label>
+                    <input type="frequency" class="form-control" id="frequency-input" name="frequency">
+                </div>
+                <button type="submit" id="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <div class="col-sm-3"></div>
+        </div>
+        </div>
+    </div>
+          </div>
+
+ <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery.js"></script>
+
+            <!-- Link to Moment.js should go here -->
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+            <!-- Script -->
+            <script>
+            // ========================================== START CODING BELOW!!
+
+            // Initialize Firebase
+            var config = {      
+                apiKey: "AIzaSyCElNg9K5Z7v39_LEtpW6ZT0mlvNKLV8sc",
+                authDomain: "employee-timesheet-ed560.firebaseapp.com",
+                databaseURL: "https://employee-timesheet-ed560.firebaseio.com",
+                projectId: "employee-timesheet-ed560",
+                storageBucket: "",
+                messagingSenderId: "182448999410"
+            };
+
+            firebase.initializeApp(config);
+
+            // Create a variable to reference the database.
+            var database = firebase.database();
+           
+
+            // Initial Values
+            var employeeName = "";
+            var role = "";
+            var startDate = "";
+            var monthlyRate = 0;
+
+            // var randomDate = $("#startDate-input")
+            var randomFormat = "DD/MM/YYYY";
+            var convertedDate = moment(startDate, randomFormat);
+
+            var monthsWorked = (moment(convertedDate).diff(moment(), "months"));
+
+            console.log("anything?", monthsWorked);
+
+            // Capture Button Click
+            $("#submit").on("click", function(event) {
+                event.preventDefault();
+
+                // Grabbed values from text boxes
+                employeeName = $("#employeeName-input").val().trim();
+                role = $("#role-input").val().trim();
+                startDate = $("#startDate-input").val().trim();
+                monthlyRate = $("#monthlyRate-input").val().trim();
+
+                // Code for handling the push
+                database.ref().push({
+                    employeeName: employeeName,
+                    role: role,
+                    startDate: startDate,
+                    monthlyRate: monthlyRate,
+                    dateAdded: firebase.database.ServerValue.TIMESTAMP
+                });
+
+            });
+
+
+                database.ref().on("child_added", function(childSnapshot) {
+
+                    // Log everything that's coming out of snapshot
+                    console.log(childSnapshot.val().employeeName);
+                    console.log(childSnapshot.val().role);
+                    console.log(childSnapshot.val().startDate);
+                    console.log(childSnapshot.val().monthlyRate);
+
+                // full list of items to the well
+                $(".table").append("<tr class='well'><td class='member-name'> " + childSnapshot.val().employeeName +
+                    " </td><td class='member-email'> " + childSnapshot.val().role +
+                    " </td><td class='member-age'> " + childSnapshot.val().startDate +
+                    " </td><td class='member-comment'> " + childSnapshot.val().monthlyRate + " </td></tr>");
+
+                });
+
+             // Firebase watcher + initial loader + order/limit HINT: .on("child_added"
+            database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+                // storing the snapshot.val() in a variable for convenience
+                var sv = snapshot.val();
+
+                // Console.loging the last user's data
+                console.log(sv.employeeName);
+                console.log(sv.role);
+                console.log(sv.startDate);
+                console.log(sv.dateAdded);
+
+                // Change the HTML to reflect
+                $("#employeeName-display").text(sv.employeeName);
+                $("#role-display").text(sv.role);
+                $("#startDate-display").text(sv.startDate);
+                $("#dateAdded-display").text(sv.dateAdded);
+
+                // Handle the errors
+            }, function(errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            });
+
+      </script>
+   </body>
+   
+   </html>
