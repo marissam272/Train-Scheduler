@@ -43,15 +43,19 @@ $("#submit").on("click", function(event) {
     firstTrain = $("#firstTrain-input").val();
 
     // Code for handling the push
-    database.ref().push({
+    // database.ref().push({
+        var train = {
         trainName: trainName,
         destination: destination,
         frequency: frequency,
-        firstTrain: firstTrain,
+        firstTrain: firstTrain
+};
         // dateAdded: firebase.database.ServerValue.TIMESTAMP
-    });
+    // });
 
-});
+    database.ref().push(train);
+
+// });
 
 
     database.ref().on("child_added", function(childSnapshot) {
@@ -131,6 +135,8 @@ database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", functi
 }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
 });
+});
+
 });
 
 });
