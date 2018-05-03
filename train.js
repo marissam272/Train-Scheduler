@@ -66,13 +66,13 @@ $("#submit").on("click", function(event) {
         console.log(childSnapshot.val().frequency);
         console.log(childSnapshot.val().firstTrain);
 
-    // full list of items to the well
-    $(".table").append("<tr class='well'><td class='train-name'> " + childSnapshot.val().trainName +
-        " </td><td class='train-destination'> " + childSnapshot.val().destination +
-            " </td><td class='train-frequency'> " + childSnapshot.val().frequency + " </td></tr>");
-        // " </td><td class='first-train'> " + childSnapshot.val().firstTrain;
+    // // full list of items to the well
+    // $(".table").append("<tr class='well'><td class='train-name'> " + childSnapshot.val().trainName +
+    //     " </td><td class='train-destination'> " + childSnapshot.val().destination +
+    //         " </td><td class='train-frequency'> " + childSnapshot.val().frequency + " </td></tr>");
+    //     // " </td><td class='first-train'> " + childSnapshot.val().firstTrain;
 
-    });
+    // });
 
 // Create Firebase event for adding a train to the database and a row in the html when a user adds an entry
 var fireBaseTrain = database.ref().on("child_added", function(childSnapshot, prevChildKey) {
@@ -108,11 +108,23 @@ var nextTrainArrival = moment().add(trainArrivesIn, "minutes");
 var nextArrivalConverted = moment(nextTrainArrival).format("HH:mm");
 console.log(nextArrivalConverted);
 
-var minsAway = nextArrivalConverted
+var minsAway = nextArrivalConverted;
+
+// full list of items to the well
+$(".table").append("<tr class='well'><td class='train-name'> " + childSnapshot.val().trainName +
+" </td><td class='train-destination'> " + childSnapshot.val().destination +
+    " </td><td class='train-frequency'> " + childSnapshot.val().frequency + "<td class='next-arrival'>" + nextArrivalConverted +
+    " </td><td class='train-arrives'> " + trainArrivesIn + " </td></tr>");
+// " </td><td class='first-train'> " + childSnapshot.val().firstTrain;
+
+});
+
+// $(".table").append("<tr class='well'><td class='next-arrival'> " + nextArrivalConverted +
+//         " </td><td class='train-arrives'> " + trainArrivesIn + " </td></tr> ");
 
 // Add each train's data into the table
-$("#schedule-table > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-frequency + "</td><td>" + nextArrivalConverted + "</td><td>" + trainArrivesIn + "</td>");
+// $("#schedule-table > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
+// frequency + "</td><td>" + nextArrivalConverted + "</td><td>" + trainArrivesIn + "</td>");
 
  // Firebase watcher + initial loader + order/limit HINT: .on("child_added"
 database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
