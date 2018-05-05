@@ -17,10 +17,10 @@ var $scheduleTable = $("#schedule-table");
 
 
 // Initial Values
-var trainName = "";
-var destination = "";
-var firstTrain = "";
-var frequency = 0;
+// var trainName = "";
+// var destination = "";
+// var firstTrain = "";
+// var frequency = 0;
 
 // var randomDate = $("#startDate-input")
 // var randomFormat = "DD/MM/YYYY";
@@ -37,34 +37,48 @@ $("#submit").on("click", function(event) {
     event.preventDefault();
 
     // Grabbed values from text boxes
-    trainName = $("#trainName-input").val();
-    destination = $("#destination-input").val();
-    frequency = $("#frequency-input").val();
-    firstTrain = $("#firstTrain-input").val();
+    var $trainName = $("#trainName-input").val();
+    var $destination = $("#destination-input").val();
+    var $frequency = $("#frequency-input").val();
+    var $firstTrain = $("#firstTrain-input").val();
 
     // Code for handling the push
     // database.ref().push({
         var train = {
-        trainName: trainName,
-        destination: destination,
-        frequency: frequency,
-        firstTrain: firstTrain
+        trainName: $trainName,
+        destination: $destination,
+        frequency: $frequency,
+        firstTrain: $firstTrain
 };
         // dateAdded: firebase.database.ServerValue.TIMESTAMP
     // });
 
+    //push data to database
     database.ref().push(train);
 
 // });
+
+    //clear all of the checkboxes
+    $("#trainName-input").val("");
+    $("#destination-input").val("");
+    $("#frequency-input").val("");
+    $("#firstTrain-input").val("");
 
 
     database.ref().on("child_added", function(childSnapshot) {
 
         // Log everything that's coming out of snapshot
-        console.log(childSnapshot.val().trainName);
-        console.log(childSnapshot.val().destination);
-        console.log(childSnapshot.val().frequency);
-        console.log(childSnapshot.val().firstTrain);
+        // console.log(childSnapshot.val().trainName);
+        // console.log(childSnapshot.val().destination);
+        // console.log(childSnapshot.val().frequency);
+        // console.log(childSnapshot.val().firstTrain);
+
+        // Store everything into a variable.
+        var trainName = childSnapshot.val().trainName;
+        var destination = childSnapshot.val().destination;
+        var frequency = childSnapshot.val().frequency;
+        var firstTrain = childSnapshot.val().firstTrain;
+        
 
     // // full list of items to the well
     // $(".table").append("<tr class='well'><td class='train-name'> " + childSnapshot.val().trainName +
