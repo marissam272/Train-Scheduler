@@ -64,6 +64,8 @@ $("#submit").on("click", function(event) {
     $("#frequency-input").val("");
     $("#firstTrain-input").val("");
 
+});
+
 
     database.ref().on("child_added", function(childSnapshot) {
 
@@ -165,4 +167,4 @@ database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", functi
 
 });
 
-});
+// });
