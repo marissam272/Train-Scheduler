@@ -67,7 +67,7 @@ $("#submit").on("click", function(event) {
 });
 
 
-    database.ref().on("child_added", function(childSnapshot) {
+    // database.ref().on("child_added", function(childSnapshot) {
 
         // Log everything that's coming out of snapshot
         // console.log(childSnapshot.val().trainName);
@@ -76,10 +76,10 @@ $("#submit").on("click", function(event) {
         // console.log(childSnapshot.val().firstTrain);
 
         // Store everything into a variable.
-        var trainName = childSnapshot.val().trainName;
-        var destination = childSnapshot.val().destination;
-        var frequency = childSnapshot.val().frequency;
-        var firstTrain = childSnapshot.val().firstTrain;
+        // var trainName = childSnapshot.val().trainName;
+        // var destination = childSnapshot.val().destination;
+        // var frequency = childSnapshot.val().frequency;
+        // var firstTrain = childSnapshot.val().firstTrain;
         
 
     // // full list of items to the well
@@ -165,6 +165,6 @@ database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", functi
 });
 });
 
-});
+// });
 
 // });
